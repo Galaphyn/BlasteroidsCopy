@@ -29,5 +29,10 @@ public class PlayerControls : MonoBehaviour
             pos.x += speed * Time.deltaTime;
         }
         transform.position = pos;   
+
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+
+        }
     }
 }
