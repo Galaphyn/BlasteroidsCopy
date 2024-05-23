@@ -6,8 +6,11 @@ public class PlayerControl : MonoBehaviour
 {
     private float speed = 5f;
 
+    public float cooldown = 0.25f;
+    private float cooldownTimer;
     public float projSpeed = 10f;
     public GameObject projectile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,9 +35,10 @@ public class PlayerControl : MonoBehaviour
         }
         transform.position = pos;
 
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse0) && cooldownTimer < Time.time)
         {
             ShootLaser(direction);
+            cooldownTimer = Time.time + cooldown;
         }
     }
 
