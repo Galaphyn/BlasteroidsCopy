@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
@@ -48,7 +49,8 @@ public class PlayerControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space) && specialTimer < Time.time)
         {
-            ShootSpecial();
+            //ShootSpecial();
+            StartCoroutine(ShootSpecial());
             specialTimer = Time.time + specialCooldown;
         }
     }
@@ -65,16 +67,45 @@ public class PlayerControl : MonoBehaviour
         proj.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    private void ShootSpecial()
+    private IEnumerator ShootSpecial()
     {
+        float multiCooldown = 0.5f;
+
         Vector3 startPosition = new Vector3(-spacing * (numberOfProjectiles - 1) / 2, -Camera.main.orthographicSize, 0);
- 
-        for (int i = 0; i < numberOfProjectiles; i++)
+        for (int i = 0; i < 3; i++)
         {
-            Vector3 spawnPosition = startPosition + new Vector3(i * spacing, 0, 0);
-            GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
-            proj.GetComponent<Rigidbody2D>().velocity = Vector2.up * projSpeed;
+            for (int j = 0; j < numberOfProjectiles; j++)
+            {
+                Vector3 spawnPosition = startPosition + new Vector3(j * spacing, 0, 0);
+                GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
+                proj.GetComponent<Rigidbody2D>().velocity = Vector2.up * projSpeed;
+            }
+            yield return new WaitForSeconds(multiCooldown); // Wait for the cooldown before the next iteration
         }
     }
+
+    /*
+    private void ShootSpecial()
+    {
+        float multiCooldown = 0.5f;
+        float multiTimer = 0;
+
+        Vector3 startPosition = new Vector3(-spacing * (numberOfProjectiles - 1) / 2, -Camera.main.orthographicSize, 0);
+        for (int i = 0; i < 3; i++)
+        {
+            if (multiTimer < Time.time)
+            {
+                for (int j = 0; j < numberOfProjectiles; j++)
+                {
+                    Vector3 spawnPosition = startPosition + new Vector3(j * spacing, 0, 0);
+                    GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
+                    proj.GetComponent<Rigidbody2D>().velocity = Vector2.up * projSpeed;
+                }
+                multiTimer = multiCooldown + Time.time;
+            }
+ 
+        }
+    }
+    */
 }
 
