@@ -11,6 +11,11 @@ public class PlayerControl : MonoBehaviour
     public float projSpeed = 10f;
     public GameObject projectile;
 
+    public int numberOfProjectiles = 40;
+    public float spacing = .5f;
+    public float specialCooldown = 10f;
+    private float specialTimer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +45,12 @@ public class PlayerControl : MonoBehaviour
             ShootLaser(direction);
             cooldownTimer = Time.time + cooldown;
         }
+
+        if (Input.GetKey(KeyCode.Space) && specialTimer < Time.time)
+        {
+            ShootSpecial();
+            specialTimer = Time.time + specialCooldown;
+        }
     }
 
     private void ShootLaser(Vector2 direction)
@@ -53,4 +64,17 @@ public class PlayerControl : MonoBehaviour
         angle -= 90;
         proj.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
+
+    private void ShootSpecial()
+    {
+        Vector3 startPosition = new Vector3(-spacing * (numberOfProjectiles - 1) / 2, -Camera.main.orthographicSize, 0);
+ 
+        for (int i = 0; i < numberOfProjectiles; i++)
+        {
+            Vector3 spawnPosition = startPosition + new Vector3(i * spacing, 0, 0);
+            GameObject proj = Instantiate(projectile, spawnPosition, Quaternion.identity);
+            proj.GetComponent<Rigidbody2D>().velocity = Vector2.up * projSpeed;
+        }
+    }
 }
+
