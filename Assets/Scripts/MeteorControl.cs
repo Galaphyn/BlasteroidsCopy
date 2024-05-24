@@ -7,6 +7,8 @@ public class MeteorControl : MonoBehaviour
     // Start is called before the first frame update
     public float speed = 2f;
     public float bound = -8f;
+
+    private int hp = 3;
     void Start()
     {
         
@@ -25,8 +27,14 @@ public class MeteorControl : MonoBehaviour
     {
         if(collision.tag == "Laser")
         {
-            Destroy(gameObject);
+            hp--;
             Destroy(collision.gameObject);
+            if (hp <= 0) 
+            {
+                ScoreControl score = GameObject.Find("ScoreKeeper").GetComponent<ScoreControl>();
+                score.updateScore();
+                Destroy(gameObject);
+            }
         }    
     }
 }
