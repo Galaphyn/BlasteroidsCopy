@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -16,6 +18,8 @@ public class PlayerControl : MonoBehaviour
     public float spacing = .5f;
     public float specialCooldown = 10f;
     private float specialTimer;
+
+    public bool isPaused = false;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +57,16 @@ public class PlayerControl : MonoBehaviour
             StartCoroutine(ShootSpecial());
             specialTimer = Time.time + specialCooldown;
         }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            Restart();
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            Pause();
+        }
     }
 
     private void ShootLaser(Vector2 direction)
@@ -82,6 +96,19 @@ public class PlayerControl : MonoBehaviour
             }
             yield return new WaitForSeconds(multiCooldown); // Wait for the cooldown before the next iteration
         }
+    }
+
+    private void Restart()
+    {
+        // Reload the current scene
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+    }
+
+    private void Pause()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0 : 1;
     }
 
     /*
