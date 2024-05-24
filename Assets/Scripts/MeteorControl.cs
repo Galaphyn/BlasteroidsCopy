@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class MeteorControl : MonoBehaviour
 {
@@ -9,9 +10,11 @@ public class MeteorControl : MonoBehaviour
     public float bound = -8f;
 
     private int hp = 3;
+
+    GameControl gameControl;
     void Start()
     {
-        
+        gameControl = GameObject.Find("GameControl").GetComponent<GameControl>();
     }
 
     // Update is called once per frame
@@ -31,10 +34,32 @@ public class MeteorControl : MonoBehaviour
             Destroy(collision.gameObject);
             if (hp <= 0) 
             {
-                ScoreControl score = GameObject.Find("ScoreKeeper").GetComponent<ScoreControl>();
-                score.updateScore();
+                gameControl.updateScore();
                 Destroy(gameObject);
             }
-        }    
+        }
+        
+        if (collision.tag == "Player")
+        {
+            gameControl.updatePlayerHP();
+            if (gameControl.player <= 0) 
+            {
+                Destroy(collision.gameObject);
+                Time.timeScale = 0;
+            }
+            Destroy(gameObject);
+        }
+
+
+        if (collision.tag == "Planet")
+        {
+            gameControl.updatePlanetHP();
+            if (gameControl.planet <= 0)
+            {
+                Destroy(collision.gameObject);
+                Time.timeScale = 0;
+            }
+            Destroy(gameObject);
+        }
     }
 }
