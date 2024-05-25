@@ -46,6 +46,7 @@ public class MeteorControl : MonoBehaviour
             {
                 Destroy(collision.gameObject);
                 Time.timeScale = 0;
+                gameControl.gameOver();
             }
             Destroy(gameObject);
         }
@@ -58,6 +59,7 @@ public class MeteorControl : MonoBehaviour
             {
                 Destroy(collision.gameObject);
                 Time.timeScale = 0;
+                gameControl.gameOver();
             }
             Destroy(gameObject);
         }
