@@ -13,12 +13,15 @@ public class GameControl : MonoBehaviour
 
     public int planet = 4;
     public Text planetHP;
+
+    public Text GameOver;
     // Start is called before the first frame update
     void Start()
     {
         scoreText.text = "Score: " + score;
         playerHP.text = "Player HP: " + player;
         planetHP.text = "Planet HP: " + planet;
+        GameOver.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,7 +29,10 @@ public class GameControl : MonoBehaviour
     {
         
     }
-
+    public void gameOver()
+    {
+        GameOver.gameObject.SetActive(true);
+    }
     public void updateScore()
     {
         score += 100;
